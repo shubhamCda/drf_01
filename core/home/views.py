@@ -49,13 +49,13 @@ def index(request):
     #     print("This is a PUT     Request")
     #     return Response(courses)
     
-@api_view(['GET', 'POST'])       
+@api_view(['GET', 'POST', 'PUT', 'PATCH'])       
 def people_create(request):
-    if request.GET: 
+    if request.method == 'GET': 
        objs = Person.objects.all()
        serializer = PeopleSerializer(objs,  many=True)
        return Response(serializer.data)
-    else:
+    elif request.method == 'POST':  
         data = request.data
         serializer = PeopleSerializer(data=data)
         if serializer.is_valid():
@@ -63,3 +63,21 @@ def people_create(request):
             return Response(serializer.data)
         
         return Response(serializer.errors)
+    
+    elif request.method == 'PUT':  #Doesn't support partial UPDATION
+        data= request.data
+        serializer = PeopleSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return  Response(serializer.errors)
+    
+    elif request.method == 'PATCH':  #Supports partial UPDATION
+        data= request.data
+        serializer = PeopleSerializer(data=data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return  Response(serializer.errors)

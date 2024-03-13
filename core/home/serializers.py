@@ -6,7 +6,7 @@ class PeopleSerializer(serializers.Serializer):
     
     class meta:
         model = Person
-        fields = '__all__'   #to include all fields in the model</s>
+        fields = ['name', 'age']  #to include all fields in the model</s>
 
         # fields = [       # to sets the fields
         #     'name', 'age', 
